@@ -1,22 +1,22 @@
 clear all;
 %=CONSTANTS=
 pore = 0.4;
-L = 1;
+L = 10;
 global gamma_w = 9.81;
 global rho_caco3 = 2710;
 global A = 0.037;
 global B = 0.11374; % m / min
 global C = 0.0054; % per min
 global D = 0.01;
-global E = 1440; % life span of bacteria = 1 days
+global E = 4320; % life span of bacteria = 3 days
 %=PRESSURE BCs=
 global p_in = 200; %kPa
 global p_out = 100; %kPa
 %=CONCENTRATION IC
 global u_in = 1;
 %=Spatial discritization
-global N = 20; % points = N+1
-global dx = L/N;
+global N = 200; % points = N+1
+global dx = L/N; % 0.05
 global dt = 0.01;
 global w = 4*dx/dt;
 
@@ -30,7 +30,7 @@ PP = pressure(KK,NN,RR);
 VV = velocity(KK,PP);
 UC = zeros(N+1,1);
 
-M = 120/dt;
+M = E/dt;
 for m = 1:M
 	t = m*dt;
 	[u,v,k,p,n,R] = fixedpoint(UU(:,end),RR(:,end),NN(:,end), VV(:,end),t);
@@ -41,7 +41,11 @@ for m = 1:M
   UC = [UC uc];
 	t
 end
-%dlmwrite('uu.txt',UU);
-%dlmwrite('kk.txt',KK);
-%dlmwrite('uc.txt',UC);
+dlmwrite('uu.txt',UU);
+dlmwrite('kk.txt',KK);
+dlmwrite('uc.txt',UC);
+dlmwrite('nn.txt',NN);
+dlmwrite('vv.txt',VV);
+dlmwrite('pp.txt',PP);
+dlmwrite('rr.txt',RR);
 
